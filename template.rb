@@ -98,6 +98,7 @@ with_log['installing gems'] do
   end
 
   run_bundle
+  rails_command 'tailwindcss:install'
 end
 
 with_log['installing files'] do
