@@ -1,10 +1,5 @@
 require "solidus_starter_frontend_spec_helper"
 
-# I'm getting the "NameError Exception: uninitialized constant
-# `#<Class:0x000056478b9a4100>::ActiveStorageAttachment`" in byebug unless I
-# require spree/taxon.
-require 'spree/taxon'
-
 RSpec.describe BreadcrumbsComponent, type: :component do
   let(:request_url) { '/' }
 
@@ -15,7 +10,7 @@ RSpec.describe BreadcrumbsComponent, type: :component do
   context 'when rendered' do
     before do
       with_request_url(request_url) do
-        render_inline(described_class.new(taxon))
+        render_inline(described_class.new(taxon: taxon))
       end
     end
 

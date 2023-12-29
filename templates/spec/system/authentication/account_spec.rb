@@ -3,6 +3,10 @@
 require 'solidus_starter_frontend_spec_helper'
 
 RSpec.feature 'Accounts', type: :system do
+  include SolidusStarterFrontend::System::CheckoutHelpers
+
+  before { setup_custom_products }
+
   context 'editing' do
     scenario 'can edit an admin user' do
       user = create(:admin_user, email: 'admin@person.com', password: 'password', password_confirmation: 'password')
@@ -12,7 +16,7 @@ RSpec.feature 'Accounts', type: :system do
       fill_in 'Password:', with: user.password
       click_button 'Login'
 
-      click_link 'My Account'
+      click_link '', href: '/account'
       expect(page).to have_text 'admin@person.com'
     end
 
@@ -25,7 +29,7 @@ RSpec.feature 'Accounts', type: :system do
       fill_in 'Password Confirmation', with: 'password'
       click_button 'Create'
 
-      click_link 'My Account'
+      click_link '', href: '/account'
       expect(page).to have_text 'email@person.com'
       click_link 'Edit'
 
@@ -46,7 +50,7 @@ RSpec.feature 'Accounts', type: :system do
       fill_in 'Password:', with: user.password
       click_button 'Login'
 
-      click_link 'My Account'
+      click_link '', href: '/account'
       expect(page).to have_text 'email@person.com'
       click_link 'Edit'
 

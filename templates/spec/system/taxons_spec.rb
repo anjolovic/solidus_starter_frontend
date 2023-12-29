@@ -2,7 +2,7 @@
 
 require 'solidus_starter_frontend_spec_helper'
 
-RSpec.describe 'viewing products', type: :system, inaccessible: true do
+RSpec.describe 'viewing products', type: :system do
   let!(:taxonomy) { create(:taxonomy, name: "Category") }
   let!(:super_clothing) { create(:taxon, name: "Super Clothing", parent: taxonomy.root, taxonomy: taxonomy) }
   let!(:t_shirts) { create(:taxon, name: "T-Shirts", parent: super_clothing, taxonomy: taxonomy) }
@@ -64,7 +64,9 @@ RSpec.describe 'viewing products', type: :system, inaccessible: true do
   end
 
   context "taxon pages" do
-    include_context "custom products"
+    include SolidusStarterFrontend::System::CheckoutHelpers
+
+    before { setup_custom_products }
 
     let(:product_names) do
       page.all('ul.products-grid li a').map(&:text).flatten.reject(&:blank?).sort
@@ -75,16 +77,13 @@ RSpec.describe 'viewing products', type: :system, inaccessible: true do
     end
 
     it "should be able to visit brand Ruby on Rails" do
-      within(:css, '.taxonomies') { click_link "Ruby on Rails" }
+      within(:css, '.taxonomies') { click_link "Accessories" }
 
       expect(product_names).to contain_exactly(
-        "Ruby on Rails Bag",
-        "Ruby on Rails Baseball Jersey",
-        "Ruby on Rails Jr. Spaghetti",
-        "Ruby on Rails Mug",
-        "Ruby on Rails Ringer T-Shirt",
-        "Ruby on Rails Stein",
-        "Ruby on Rails Tote"
+        "Solidus Water Bottle",
+        "Solidus canvas tote bag",
+        "Solidus mug set",
+        "Solidus notebook"
       )
     end
 
@@ -92,11 +91,13 @@ RSpec.describe 'viewing products', type: :system, inaccessible: true do
       click_link "Clothing"
 
       expect(product_names).to contain_exactly(
-        "Apache Baseball Jersey",
-        "Ruby Baseball Jersey",
-        "Ruby on Rails Baseball Jersey",
-        "Ruby on Rails Jr. Spaghetti",
-        "Ruby on Rails Ringer T-Shirt"
+        "Solidus cap",
+        "Solidus dark tee",
+        "Solidus hoodie",
+        "Solidus long sleeve tee",
+        "Solidus t-shirt",
+        "Solidus tote",
+        "Solidus winter hat"
       )
     end
   end
@@ -130,11 +131,11 @@ RSpec.describe 'viewing products', type: :system, inaccessible: true do
     end
 
     it 'changes the current taxon' do
-      expect(page).to have_css('.taxonomies li:first.current')
-      expect(page).to have_no_css('.taxonomies li:last.current')
+      expect(page).to have_css(".taxonomies li:first.underline")
+      expect(page).to have_no_css('.taxonomies li:last.underline')
       find('.taxonomies a[href*="more-clothing"]').click
-      expect(page).to have_no_css('.taxonomies li:first.current')
-      expect(page).to have_css('.taxonomies li:last.current')
+      expect(page).to have_no_css('.taxonomies li:first.underline')
+      expect(page).to have_css('.taxonomies li:last.underline')
     end
   end
 end
